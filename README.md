@@ -1,5 +1,7 @@
 `nsq-reception-acker`
 =====================
+*Status*: Alpha. Not used in production.
+
 Similar to [`nsq_to_nsq`](http://nsq.io/components/utilities.html#nsq_to_nsq),
 but also published an acknowledgement to a topic that a message has been
 received.
