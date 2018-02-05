@@ -1,6 +1,6 @@
 `nsq-reception-acker`
 =====================
-*Status*: Alpha. Not used in production.
+**Status**: Alpha. Not used in production.
 
 Similar to [`nsq_to_nsq`](http://nsq.io/components/utilities.html#nsq_to_nsq),
 but also published an acknowledgement to a topic that a message has been
@@ -33,10 +33,10 @@ Envelope Message Format
 Each message sent to `nsq-reception-acker` must be JSON formatted and contain
 the following fields:
 
- * *`payload-destination`*: The topic to which the `payload` string should be
+ * **`payload-destination`**: The topic to which the `payload` string should be
    sent to.
- * *`payload`*: The message body to be sent to `payload-destination`.
- * *`acknowledgement-topic`*: The topic to which the acknowledgement should be
+ * **`payload`**: The message body to be sent to `payload-destination`.
+ * **`acknowledgement-topic`**: The topic to which the acknowledgement should be
    sent.
- * *`message-id`*: The message body that should be sent to the
+ * **`message-id`**: The message body that should be sent to the
    `acknowledgement-topic`.
