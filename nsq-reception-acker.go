@@ -60,7 +60,7 @@ func main() {
 	var err error
 
 	var producer *nsq.Producer
-	producer, err = nsq.NewProducer((*sendAddr).String(), &nsq.Config{})
+	producer, err = nsq.NewProducer((*sendAddr).String(), nsq.NewConfig())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +71,7 @@ func main() {
 	}
 
 	var consumer *nsq.Consumer
-	consumer, err = nsq.NewConsumer(*receiveTopic, *receiveChannel, &nsq.Config{})
+	consumer, err = nsq.NewConsumer(*receiveTopic, *receiveChannel, nsq.NewConfig())
 	if err != nil {
 		log.Fatal(err)
 	}
