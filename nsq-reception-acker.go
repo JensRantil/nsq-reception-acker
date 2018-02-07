@@ -114,15 +114,24 @@ func (h *Handler) HandleMessage(m *nsq.Message) error {
 		return nil
 	}
 
-	// TODO: Make two PublishAsync calls here to speed up processing.
+	// Making two PublishAsync calls here to speed up processing.
 
-	if err := h.Producer.Publish(e.PayloadDestination, []byte(e.Payload)); err != nil {
+	payloadDoneChan := make(chan *nsq.ProducerTransaction)
+	if err := h.Producer.PublishAsync(e.PayloadDestination, []byte(e.Payload), payloadDoneChan); err != nil {
 		return err
 	}
 
 	// Debatable if should return this error or not.
-	if err := h.Producer.Publish(e.AcknowledgementTopic, []byte(e.MessageId)); err != nil {
+	ackDoneChan := make(chan *nsq.ProducerTransaction)
+	if err := h.Producer.PublishAsync(e.AcknowledgementTopic, []byte(e.MessageId), ackDoneChan); err != nil {
 		return err
+	}
+
+	if result := <-payloadDoneChan; result.Error != nil {
+		return result.Error
+	}
+	if result := <-payloadDoneChan; result.Error != nil {
+		return result.Error
 	}
 
 	messagesSent.Inc()
