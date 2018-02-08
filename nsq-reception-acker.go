@@ -81,7 +81,7 @@ func main() {
 		log.Fatal(http.ListenAndServe((*prometheusListen).String(), nil))
 	}()
 
-	consumer.AddConcurrentHandlers(&Handler{producer}, *concurrency)
+	consumer.AddConcurrentHandlers(&LoggingHandler{&Handler{producer}}, *concurrency)
 
 	lookupdStrings := make([]string, len(*lookupds))
 	for i, e := range *lookupds {
@@ -98,6 +98,18 @@ func main() {
 
 	consumer.Stop()
 	<-consumer.StopChan
+}
+
+type LoggingHandler struct {
+	Delegate nsq.Handler
+}
+
+func (h *LoggingHandler) HandleMessage(m *nsq.Message) error {
+	err := h.Delegate.HandleMessage(m)
+	if err != nil {
+		log.Println(err)
+	}
+	return err
 }
 
 type Handler struct {
