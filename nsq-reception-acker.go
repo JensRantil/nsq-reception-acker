@@ -75,6 +75,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	consumer.ChangeMaxInFlight(20)
 
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())
